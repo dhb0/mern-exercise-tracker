@@ -1,25 +1,39 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from "react";
+import { BrowserRouter, Route } from "react-router-dom";
+import Navbar from "./Components/navbar.component";
+import ExercisesList from "./Components/exercises-list.component";
+import EditExercise from "./Components/edit-exercise.component";
+import CreateUser from "./Components/create-user.component";
+import CreateExercise from "./Components/create-exercise.component";
+import { makeStyles } from "@material-ui/core/styles";
+import { useDispatch } from "react-redux";
+import { fetchExercises } from "./actions/index";
 
-function App() {
+const useStyles = makeStyles((theme) => ({
+  root: {
+    marginTop: "80px",
+  },
+}));
+
+const App = () => {
+  const classes = useStyles();
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchExercises());
+  });
+  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Navbar />
+      <br />
+      <div className={classes.root}>
+        <Route exact path="/" component={ExercisesList}></Route>
+        <Route path="/edit/:id" component={EditExercise}></Route>
+        <Route path="/create" component={CreateExercise}></Route>
+        <Route path="/user" component={CreateUser}></Route>
+      </div>
+    </BrowserRouter>
   );
-}
+};
 
 export default App;
